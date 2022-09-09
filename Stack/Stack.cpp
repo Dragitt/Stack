@@ -1,36 +1,57 @@
 #include "Stack.h"
 
-
-bool Stack::stackEmpty() {
+template<typename T>
+bool Stack<T>::stackEmpty() {
 	if (top == bot) return 1;
 	else return 0;
 }
 
-void Stack::push(char x) {
+template<typename T>
+void Stack<T>::push(T x) {
 		top++;
 		*top = x;
 }
 
-char Stack::pop() {
-	char temp;
+template<typename T>
+T Stack<T>::pop() {
+	T temp;
 	temp = *top;
 	top--;
 
 	return temp;
 }
 
-char Stack::topVal() {
+template<typename T>
+T Stack<T>::topVal() {
 	return *top;
 }
 
-void Stack::stackPrint() {
-	char* temp = top;
+template<typename T>
+void Stack<T>::stackPrint() {
+	T* temp = top;
+
+	std::cout << "---STACK---" << std::endl;
 
 	while (temp != bot) {
-		std::cout << *temp << std::endl;
+		std::cout << *temp << std::endl << "----------" << std::endl;
 		temp--;
 	}
 
 	std::cout << std::endl;
 
+}
+
+template<typename T>
+void Stack<T>::stackReverse() {
+	T* p1 = bot + 1, * p2 = top;
+	T temp;
+
+	while (p1 != p2) {
+		temp = *p1;
+		*p1 = *p2;
+		*p2 = temp;
+
+		p1++;
+		p2--;
+	}
 }

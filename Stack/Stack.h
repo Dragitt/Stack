@@ -7,24 +7,27 @@
 
 const int MAX_S = 100;
 
+template <typename T>
 class Stack
 {
 private:
 
-	char *top = new char[MAX_S];
-	char* bot = top;
+	T *top = new T[MAX_S];
+	T* bot = top;
 
 public:
 
 	bool stackEmpty();
 
-	void push(char x);
+	void push(T x);
 
-	char pop();
+	T pop();
 
-	char topVal();
+	T topVal();
 
 	void stackPrint();
+
+	void stackReverse();
 
 
 
