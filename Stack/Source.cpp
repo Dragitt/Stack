@@ -5,6 +5,7 @@ int main() {
 
 	Stack<char> stack;
 	Stack<int> pfStack;
+	Stack<int> mapStack;
 
 	std::string infix, postfix;
 
@@ -20,9 +21,9 @@ int main() {
 		switch (infix[i]) {
 
 		default :
-			//std::cout << infix[i];
 			postfix.push_back(infix[i]);
 			pfStack.push(infix[i] - '0');
+			mapStack.push(0);
 			break;
 
 		case '-':
@@ -33,10 +34,10 @@ int main() {
 				while (!stack.stackEmpty()) {
 
 					if (stack.topVal() == '*' || stack.topVal() == '/' || stack.topVal() == '+' || stack.topVal() == '-') {
-						//std::cout << stack.pop();
 						cTemp = stack.pop();
 						postfix.push_back(cTemp);
 						pfStack.push(static_cast<int>(cTemp));
+						mapStack.push(1);
 					}
 					else break;
 				}
@@ -55,10 +56,10 @@ int main() {
 				while (!stack.stackEmpty()) {
 
 					if (stack.topVal() == '*' || stack.topVal() == '/') {
-						//std::cout << stack.pop();
 						cTemp = stack.pop();
 						postfix.push_back(cTemp);
 						pfStack.push(static_cast<int>(cTemp));
+						mapStack.push(1);
 					}
 					else {
 						stack.push(infix[i]);
@@ -74,10 +75,10 @@ int main() {
 			break;
 		case ')' :
 			while (stack.topVal() != '(') {
-				//std::cout << stack.pop();
 				cTemp = stack.pop();
 				postfix.push_back(cTemp);
 				pfStack.push(static_cast<int>(cTemp));
+				mapStack.push(1);
 			}
 			stack.pop();
 		}
@@ -87,20 +88,52 @@ int main() {
 	}
 
 	while (!stack.stackEmpty()) {
-		//std::cout << stack.pop();
 		cTemp = stack.pop();
 		postfix.push_back(cTemp);
 		pfStack.push(static_cast<int>(cTemp));
+		mapStack.push(1);
 	}
 
 	std::cout << "Izgled ovog izraza u postfiksnom obliku je: " << std::endl << postfix << std::endl;
 
 	pfStack.stackReverse();
-	pfStack.stackPrint();
+	mapStack.stackReverse();
+	//pfStack.stackPrint();
 	
 	Stack<int> stack1;
 
-	for (i = 0; i < postfix.length(); i++) {
+	while (!pfStack.stackEmpty()) {
+
+		if (!mapStack.pop()) stack1.push(pfStack.pop());
+		else {
+			int op1 = stack1.pop();
+			int op2 = stack1.pop();
+
+			switch (static_cast<char>(pfStack.pop())) {
+
+			case '+':
+				stack1.push(op1 + op2);
+				break;
+			case '-':
+				stack1.push(op2 - op1);
+				break;
+			case '*':
+				stack1.push(op1 * op2);
+				break;
+			case '/':
+				stack1.push(op2 / op1);
+				break;
+
+			}
+		}
+
+
+	}
+
+
+
+
+	/*for (i = 0; i < postfix.length(); i++) {
 		if (isdigit(postfix[i])) stack1.push(postfix[i] - '0');
 		else {
 			int op1 = stack1.pop();
@@ -122,47 +155,7 @@ int main() {
 
 			}
 		}
-	}
-
-
-	/*
-	
-	Stack<char> stack1;
-
-	for (i = 0; i < postfix.length(); i++) {
-		if (isdigit(postfix[i])) stack1.push(postfix[i]);
-		else {
-			int op1 = stack1.pop() - '0';
-			int op2 = stack1.pop() - '0';
-			int temp1;
-			char c;
-
-			switch (postfix[i]) {
-			case '+':
-				temp1 = op1 + op2;
-				c = static_cast<char>(temp1) + 48;
-				stack1.push(c);
-				break;
-			case '-':
-				temp1 = op2 - op1;
-				c = static_cast<char>(temp1) + 48;
-				stack1.push(c);
-				break;
-			case '*':
-				temp1 = op1 * op2;
-				c = static_cast<char>(temp1) + 48;
-				stack1.push(c);
-				break;
-			case '/':
-				temp1 = op2 / op1;
-				c = static_cast<char>(temp1) + 48;
-				stack1.push(c);
-				break;
-
-			}
-		}
-	}
-	*/
+	}*/
 
 	std::cout << "Rezultat ovog izraza je: " << std::endl << stack1.pop() << std::endl;
 }
